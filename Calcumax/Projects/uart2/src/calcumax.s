@@ -125,11 +125,13 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         
         PUSH {R1}
         
+         BL test_after_input         
+
         ;BL form_number_first
         
         
           
-          
+        ADD R6, #0x1  
         B loop
 
 
@@ -157,7 +159,37 @@ form_number_first:
         ADD R3, R1
         
         BX LR
-test_input:
+        
+form_number_second:
+        MOV R10, #0x10
+        
+        POP {R1}
+        ADD R4, R1
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R4, R1
+        
+        MUL R10, R10
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R4, R1
+        
+        MUL R10, R10
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R4, R1
+        
+        BX LR
+        
+test_after_input:
+            B handle_end_num
+exit_henum:
+        BX LR
+        
+test_input:    
             BL handle_mult
 exit_hmul:  BL handle_add
 exit_hadd:  BL handle_sub
@@ -165,14 +197,27 @@ exit_hsub:  BL handle_div
 exit_hdiv:  BL handle_eq
 exit_heq:
             BX LR
-            
-handle_eq:        
-        CMP R1, #0x3D; Multiplication ASCII symbol
+handle_end_num:
+
+        CMP R6, #0x4; Indicates decimal 4 (end of number since they're supposed to have 4 digits max) 
         IT NE
-          BLNE exit_heq
+          BNE exit_henum
+        
+        CMP R5, #0
+        IT EQ
+          BLEQ form_number_first
+          
+        IT NE
+          BLNE form_number_second
+        
+        BX LR
+handle_eq:        
+        CMP R1, #0x3B; Equals ASCII symbol
+        IT NE
+          BLNE exit_hmul
         ORN R5, #0
         MOV R6, #1
-        MOV R7, #0
+        MOV R7, #0x1
         BX LR
 handle_mult:
 
