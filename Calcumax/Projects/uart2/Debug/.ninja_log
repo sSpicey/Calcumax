@@ -1,0 +1,10 @@
+# ninja log v5
+4	41	6424666190311126	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Obj/startup_TM4C1294.o	8077046b718af16b
+1	13	6424672931599417	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Obj/calcumax.o	75fb512f18404df0
+18	252	6424672933967266	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Exe/calcumax.out	c86611b4fbbeb1b1
+1	14	6424676886249633	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Obj/calcumax.o	75fb512f18404df0
+18	49	6424676886584922	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Exe/calcumax.out	c86611b4fbbeb1b1
+1	14	6424684867416031	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Obj/calcumax.o	75fb512f18404df0
+18	72	6424684867975025	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Exe/calcumax.out	c86611b4fbbeb1b1
+1	13	6424690369639378	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Obj/calcumax.o	75fb512f18404df0
+17	62	6424690370104789	C:/Users/PICHAU/Documents/GitHub/Calcumax/Calcumax/Projects/uart2/Debug/Exe/calcumax.out	c86611b4fbbeb1b1

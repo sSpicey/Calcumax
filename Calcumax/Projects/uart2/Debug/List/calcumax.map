@@ -1,26 +1,22 @@
 ###############################################################################
 #
-# IAR ELF Linker V9.10.1.308/W64 for ARM                  10/May/2021  21:29:48
+# IAR ELF Linker V9.10.1.308/W64 for ARM                  11/May/2021  17:43:57
 # Copyright 2007-2021 IAR Systems AB.
 #
 #    Output file  =
-#        C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\Exe\calcumax.out
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Exe\calcumax.out
 #    Map file     =
-#        C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\List\calcumax.map
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\List\calcumax.map
 #    Command line =
-#        -f "C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\Exe\calcumax.out.rsp"
-#        ("C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\Obj\calcumax.o"
-#        "C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\Obj\startup_TM4C1294.o"
-#        --no_out_extension -o "C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\Exe\calcumax.out"
+#        -f
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Exe\calcumax.out.rsp
+#        (C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Obj\calcumax.o
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Obj\startup_TM4C1294.o
+#        --no_out_extension -o
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Exe\calcumax.out
 #        --redirect _Printf=_PrintfFullNoMb --redirect _Scanf=_ScanfFullNoMb
-#        --map "C:\Users\Beto\OneDrive\햞ea de
-#        Trabalho\gabi\Calcumax\Projects\uart2\Debug\List\calcumax.map"
+#        --map
+#        C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\List\calcumax.map
 #        --config "C:\Program Files\IAR Systems\Embedded Workbench
 #        9.0\arm\config\linker\TexasInstruments\TM4C1294NC.icf" --semihosting
 #        --no_library_search --entry __iar_program_start --vfe --text_out
@@ -50,10 +46,10 @@ No sections matched the following patterns:
   .intvec   ro code          0x0   0x3c0  startup_TM4C1294.o [1]
                          - 0x3c0   0x3c0
 
-"P1":                              0x2e2
-  .text     ro code        0x3c0   0x2e0  calcumax.o [1]
-  .text     ro code        0x6a0     0x2  startup_TM4C1294.o [1]
-                         - 0x6a2   0x2e2
+"P1":                              0x30e
+  .text     ro code        0x3c0   0x30c  calcumax.o [1]
+  .text     ro code        0x6cc     0x2  startup_TM4C1294.o [1]
+                         - 0x6ce   0x30e
 
 "P2":                             0x8000
   CSTACK             0x2000'0000  0x8000  <Block>
@@ -64,7 +60,7 @@ Unused ranges:
 
          From           To      Size
          ----           --      ----
-        0x6a2     0xf'ffff  0xf'f95e
+        0x6ce     0xf'ffff  0xf'f932
   0x2000'8000  0x2003'ffff  0x3'8000
 
 
@@ -79,15 +75,15 @@ command line/config:
     ------------------------------------
     Total:
 
-C:\Users\Beto\OneDrive\햞ea de Trabalho\gabi\Calcumax\Projects\uart2\Debug\Obj: [1]
-    calcumax.o              736
+C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Obj: [1]
+    calcumax.o              780
     startup_TM4C1294.o      962
     ------------------------------------
-    Total:                1'698
+    Total:                1'742
 
     Linker created                32'768
 ----------------------------------------
-    Grand Total:          1'698   32'768
+    Grand Total:          1'742   32'768
 
 
 *******************************************************************************
@@ -106,9 +102,9 @@ __vector_table                0x0        Data  Gb  startup_TM4C1294.o [1]
 __vector_table_0x1c          0x1c        Data  Gb  startup_TM4C1294.o [1]
 
 
-[1] = C:\Users\Beto\OneDrive\햞ea de Trabalho\gabi\Calcumax\Projects\uart2\Debug\Obj
+[1] = C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\Debug\Obj
 
-   1'698 bytes of readonly  code memory
+   1'742 bytes of readonly  code memory
   32'768 bytes of readwrite data memory
 
 Errors: none

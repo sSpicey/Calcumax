@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\Beto\OneDrive\Área de Trabalho\gabi\Calcumax\Projects\uart2\settings\calcumax.Debug.general.xcl" --backend -f "C:\Users\Beto\OneDrive\Área de Trabalho\gabi\Calcumax\Projects\uart2\settings\calcumax.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\settings\calcumax.Debug.general.xcl" --backend -f "C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\settings\calcumax.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\Beto\OneDrive\Área de Trabalho\gabi\Calcumax\Projects\uart2\settings\calcumax.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Beto\OneDrive\Área de Trabalho\gabi\Calcumax\Projects\uart2\settings\calcumax.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\settings\calcumax.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\PICHAU\Documents\GitHub\Calcumax\Calcumax\Projects\uart2\settings\calcumax.Debug.driver.xcl" 
 }
