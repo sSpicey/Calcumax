@@ -99,7 +99,7 @@ main:
         ;with (1, 2, 3 or 4) to multiply it by 10, 100 or 1000 to be soon ----;
         ;after added to form the operand -------------------------------------;
         ;R7: Identifies which operation to be executed (1 for mult, 2 for add ;
-        ;, 3 for sub and 4 to divide)----------------------------------------;
+        ;, 3 for sub and 4 to divide)-----------------------------------------;
         MOV R5, #0 
         MOV R3, #0
         MOV R4, #0
@@ -119,23 +119,23 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         BEQ wtx ; If empty, go back 
         STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
           
-        ;BL test_input
+        BL handle_input
        
         SUB R1, #0x30 ; Transforms the ASCII number in HEX
         
         PUSH {R1}
         
-        BL test_after_input         
-
-        ;BL form_number_first
-        
-        
+        BL test_after_input                         
           
         ADD R6, #0x1  
         B loop
 
 
-; SUB-ROUTINES
+; --------------------------------SUBROUTINES--------------------------------;
+
+;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
+;Stack = Contains the numeric hex value of the operand ----------------------;
+;Destroys R10, R11 ----------------------------------------------------------;
 form_number_first:
         MOV R10, #0x10
         MOV R11, #0x10
@@ -159,8 +159,7 @@ form_number_first:
         MUL R1, R10
         ADD R3, R1
         
-        BX LR
-        
+        BX LR        
 form_number_second:
         MOV R10, #0x10
         
@@ -184,20 +183,16 @@ form_number_second:
         ADD R4, R1
         
         BX LR
-        
+;--------------------------------------------------------------------------;
+
+;test_after_input = Checks if we are gathering the last digit of the number;
+;R6 = In which power of 10 are we operating? ------------------------------;
+;R5 = Is it the first or second operand? ----------------------------------;
 test_after_input:
             B handle_end_num
 exit_henum:
         BX LR
         
-test_input:    
-            BL handle_mult
-exit_hmul:  BL handle_add
-exit_hadd:  BL handle_sub
-exit_hsub:  BL handle_div
-exit_hdiv:  BL handle_eq
-exit_heq:
-            BX LR
 handle_end_num:
 
         CMP R6, #0x4; Indicates decimal 4 (end of number since they're supposed to have 4 digits max) 
@@ -212,7 +207,27 @@ handle_end_num:
         IT EQ
           BEQ form_number_second
         
-        BX LR
+        BX LR        
+
+;--------------------------------------------------------------------------;
+
+;handle_input = Handles the input values accordingly ----------------------;
+;R1 = The input value -----------------------------------------------------;
+;R7 = Represents the operation the user chose -----------------------------;
+;R6 = In which power of 10 are we operating? ------------------------------;
+;R5 = Is it the first or second operand? ----------------------------------;
+handle_input:    
+            BL handle_mult
+exit_hmul:  BL handle_add
+exit_hadd:  BL handle_sub
+exit_hsub:  BL handle_div
+exit_hdiv:  BL handle_eq
+exit_heq:   
+            
+            BX LR
+
+
+
 handle_eq:        
         CMP R1, #0x3B; Equals ASCII symbol
         IT NE
