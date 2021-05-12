@@ -127,7 +127,7 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         
         BL test_after_input                         
           
-        ADD R6, #0x1  
+        ADD R6, #0x1  ;;MUDAR ISSO!!!
         B loop
 
 
@@ -261,7 +261,7 @@ handle_mult:
         IT NE
           BNE exit_hmul
         ORN R5, #0
-        MOV R6, #1
+        MOV R6, #0x1
         MOV R7, #0x1
         BX LR
 handle_add:
@@ -270,7 +270,7 @@ handle_add:
         IT NE
           BNE exit_hadd
         ORN R5, #0
-        MOV R6, #1
+        MOV R6, #0x1
         MOV R7, #0x2
         BX LR        
 handle_sub:
@@ -279,7 +279,7 @@ handle_sub:
         IT NE
           BNE exit_hsub
         ORN R5, #0
-        MOV R6, #1
+        MOV R6, #0x1
         MOV R7, #0x3
         BX LR
 handle_div:
@@ -288,7 +288,7 @@ handle_div:
         IT NE
           BNE exit_hdiv
         ORN R5, #0
-        MOV R6, #1
+        MOV R6, #0x1
         MOV R7, #0x4
         BX LR
 ;----------
