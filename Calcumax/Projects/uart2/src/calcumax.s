@@ -125,7 +125,7 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         
         PUSH {R1}
         
-         BL test_after_input         
+        BL test_after_input         
 
         ;BL form_number_first
         
@@ -138,6 +138,7 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
 ; SUB-ROUTINES
 form_number_first:
         MOV R10, #0x10
+        MOV R11, #0x10
         
         POP {R1}
         ADD R3, R1
@@ -146,13 +147,13 @@ form_number_first:
         MUL R1, R10
         ADD R3, R1
         
-        MUL R10, R10
+        MUL R10, R11
         
         POP {R1}
         MUL R1, R10
         ADD R3, R1
         
-        MUL R10, R10
+        MUL R10, R11
         
         POP {R1}
         MUL R1, R10
@@ -205,10 +206,11 @@ handle_end_num:
         
         CMP R5, #0
         IT EQ
-          BLEQ form_number_first
+          BEQ form_number_first
           
-        IT NE
-          BLNE form_number_second
+        CMP R5, #0x1  
+        IT EQ
+          BEQ form_number_second
         
         BX LR
 handle_eq:        
