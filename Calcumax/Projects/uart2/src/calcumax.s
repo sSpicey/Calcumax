@@ -125,7 +125,7 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         
         PUSH {R1}
         
-       ; BL test_after_input                         
+exit_after_operation:                               
          
         B loop
 
@@ -166,15 +166,14 @@ handle_num:
         ADD R6, #0x1
         B exit_all_handle
 handle_eq:        
-        CMP R1, #0x3B; Equals ASCII symbol
+        CMP R1, #0x3D; Equals ASCII symbol
         IT NE
           BNE exit_heq
-        ORN R5, #0
+        MOV R5, #0
         MOV R6, #1
-        MOV R7, #0x1
         
-        B form_number_second
-exit_h1:
+        B form_number_second  
+exit_formnumber:
 
         CMP R7, #0x1; Tests for multiplication
         IT EQ
@@ -200,40 +199,49 @@ handle_mult:
         CMP R1, #0x2A ; Multiplication ASCII symbol
         IT NE
           BNE exit_hmul
-        ORN R5, #0
+        MOV R5, #0x1
         MOV R6, #0x1
         MOV R7, #0x1
         
         B form_number_first
         
-        B exit_all_handle
+        B exit_after_operation
 handle_add:
 
         CMP R1, #0x2B ; Addition ASCII symbol
         IT NE
           BNE exit_hadd
-        ORN R5, #0
+        MOV R5, #0x1
         MOV R6, #0x1
         MOV R7, #0x2
-        B exit_all_handle       
+        
+        B form_number_first
+        
+        B exit_after_operation     
 handle_sub:
 
         CMP R1, #0x2D ; Subtraction ASCII symbol
         IT NE
           BNE exit_hsub
-        ORN R5, #0
+        MOV R5, #0x1
         MOV R6, #0x1
         MOV R7, #0x3
-        B exit_all_handle
+        
+        B form_number_first
+        
+        B exit_after_operation
 handle_div:
 
         CMP R1, #0x2F ; Division ASCII symbol
         IT NE
           BNE exit_hdiv
-        ORN R5, #0
+        MOV R5, #0x1
         MOV R6, #0x1
         MOV R7, #0x4
-        B exit_all_handle
+        
+        B form_number_first
+        
+        B exit_after_operation
 ;--------------------------------------------------------------------------;
 
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
@@ -262,9 +270,10 @@ form_number_first:
         MUL R1, R10
         ADD R3, R1
         
-        B exit_all_handle
+        B exit_after_operation
 form_number_second:
         MOV R10, #0x10
+        MOV R11, #0x10
         
         POP {R1}
         ADD R4, R1
@@ -273,19 +282,19 @@ form_number_second:
         MUL R1, R10
         ADD R4, R1
         
-        MUL R10, R10
+        MUL R10, R11
         
         POP {R1}
         MUL R1, R10
         ADD R4, R1
         
-        MUL R10, R10
+        MUL R10, R11
         
         POP {R1}
         MUL R1, R10
         ADD R4, R1
         
-        B exit_h1
+        B exit_formnumber
 ;--------------------------------------------------------------------------;
 
 ; UART_enable: Toggles clock for UART
