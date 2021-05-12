@@ -254,7 +254,7 @@ handle_eq:
         ;;IT EQ
           ;;DIVEQ R3, R4
         
-        BX LR
+        B exit_heq
 handle_mult:
 
         CMP R1, #0x2A ; Multiplication ASCII symbol
@@ -263,7 +263,7 @@ handle_mult:
         ORN R5, #0
         MOV R6, #0x1
         MOV R7, #0x1
-        BX LR
+        B exit_hmul
 handle_add:
 
         CMP R1, #0x2B ; Addition ASCII symbol
@@ -272,7 +272,7 @@ handle_add:
         ORN R5, #0
         MOV R6, #0x1
         MOV R7, #0x2
-        BX LR        
+        B exit_hadd       
 handle_sub:
 
         CMP R1, #0x2D ; Subtraction ASCII symbol
@@ -281,7 +281,7 @@ handle_sub:
         ORN R5, #0
         MOV R6, #0x1
         MOV R7, #0x3
-        BX LR
+        B exit_hsub
 handle_div:
 
         CMP R1, #0x2F ; Division ASCII symbol
@@ -290,7 +290,7 @@ handle_div:
         ORN R5, #0
         MOV R6, #0x1
         MOV R7, #0x4
-        BX LR
+        B exit_hdiv
 ;----------
 ; UART_enable: Toggles clock for UART
 ; R2 = Bit standard used
