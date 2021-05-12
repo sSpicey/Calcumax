@@ -217,11 +217,11 @@ handle_end_num:
 ;R6 = In which power of 10 are we operating? ------------------------------;
 ;R5 = Is it the first or second operand? ----------------------------------;
 handle_input:    
-            BL handle_mult
-exit_hmul:  BL handle_add
-exit_hadd:  BL handle_sub
-exit_hsub:  BL handle_div
-exit_hdiv:  BL handle_eq
+            B handle_mult
+exit_hmul:  B handle_add
+exit_hadd:  B handle_sub
+exit_hsub:  B handle_div
+exit_hdiv:  B handle_eq
 exit_heq:   
             
             BX LR
@@ -231,16 +231,35 @@ exit_heq:
 handle_eq:        
         CMP R1, #0x3B; Equals ASCII symbol
         IT NE
-          BLNE exit_hmul
+          BNE exit_heq
         ORN R5, #0
         MOV R6, #1
         MOV R7, #0x1
+        
+        BL form_number_second
+        
+        CMP R7, #0x1; Tests for multiplication
+        IT EQ
+          MULEQ R3, R4
+          
+        CMP R7, #0x2; Tests for addition
+        IT EQ
+          ADDEQ R3, R4
+        
+        CMP R7, #0x3; Tests for subtraction
+        IT EQ
+          SUBEQ R3, R4
+        
+        ;;CMP R7, #0x4; Tests for division
+        ;;IT EQ
+          ;;DIVEQ R3, R4
+        
         BX LR
 handle_mult:
 
         CMP R1, #0x2A ; Multiplication ASCII symbol
         IT NE
-          BLNE exit_hmul
+          BNE exit_hmul
         ORN R5, #0
         MOV R6, #1
         MOV R7, #0x1
@@ -249,7 +268,7 @@ handle_add:
 
         CMP R1, #0x2B ; Addition ASCII symbol
         IT NE
-          BLNE exit_hadd
+          BNE exit_hadd
         ORN R5, #0
         MOV R6, #1
         MOV R7, #0x2
@@ -258,7 +277,7 @@ handle_sub:
 
         CMP R1, #0x2D ; Subtraction ASCII symbol
         IT NE
-          BLNE exit_hsub
+          BNE exit_hsub
         ORN R5, #0
         MOV R6, #1
         MOV R7, #0x3
@@ -267,7 +286,7 @@ handle_div:
 
         CMP R1, #0x2F ; Division ASCII symbol
         IT NE
-          BLNE exit_hdiv
+          BNE exit_hdiv
         ORN R5, #0
         MOV R6, #1
         MOV R7, #0x4

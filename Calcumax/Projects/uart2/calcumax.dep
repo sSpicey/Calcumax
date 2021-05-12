@@ -35,7 +35,7 @@
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 7 4</file>
+                    <file> 4 7</file>
                 </tool>
             </outputs>
         </file>
