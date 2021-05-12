@@ -118,20 +118,123 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         TST R2, #TXFE_BIT ; Is the transmitter empty?
         BEQ wtx ; If empty, go back 
         STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
-          
+       
         BL handle_input
        
         SUB R1, #0x30 ; Transforms the ASCII number in HEX
         
         PUSH {R1}
         
-        BL test_after_input                         
-          
-        ADD R6, #0x1  ;;MUDAR ISSO!!!
+       ; BL test_after_input                         
+         
         B loop
 
 
 ; --------------------------------SUBROUTINES--------------------------------;
+
+;handle_input = Handles the input values accordingly ----------------------;
+;R1 = The input value -----------------------------------------------------;
+;R7 = Represents the operation the user chose -----------------------------;
+;R6 = In which power of 10 are we operating? ------------------------------;
+;R5 = Is it the first or second operand? ----------------------------------;
+handle_input:    
+            B handle_mult
+exit_hmul:  B handle_add
+exit_hadd:  B handle_sub
+exit_hsub:  B handle_div
+exit_hdiv:  B handle_eq
+exit_heq:   B handle_num
+exit_all_handle:            
+            BX LR
+
+handle_num:
+        ;CMP R1, #0x3A
+        ;IT HS
+          ;BHS exit_all_handle
+        
+        ;CMP R1, #0x30
+        ;IT LO
+          ;BLO exit_all_handle
+        
+        
+        CMP R6, #0x4
+        IT HI
+          BHI exit_all_handle
+        
+        
+        
+        ADD R6, #0x1
+        B exit_all_handle
+handle_eq:        
+        CMP R1, #0x3B; Equals ASCII symbol
+        IT NE
+          BNE exit_heq
+        ORN R5, #0
+        MOV R6, #1
+        MOV R7, #0x1
+        
+        B form_number_second
+exit_h1:
+
+        CMP R7, #0x1; Tests for multiplication
+        IT EQ
+          MULEQ R3, R4
+          
+        CMP R7, #0x2; Tests for addition
+        IT EQ
+          ADDEQ R3, R4
+        
+        CMP R7, #0x3; Tests for subtraction
+        IT EQ
+          SUBEQ R3, R4
+        
+        ;;CMP R7, #0x4; Tests for division
+        ;;IT EQ
+          ;;DIVEQ R3, R4
+        
+        
+        
+        B exit_all_handle
+handle_mult:
+
+        CMP R1, #0x2A ; Multiplication ASCII symbol
+        IT NE
+          BNE exit_hmul
+        ORN R5, #0
+        MOV R6, #0x1
+        MOV R7, #0x1
+        
+        B form_number_first
+        
+        B exit_all_handle
+handle_add:
+
+        CMP R1, #0x2B ; Addition ASCII symbol
+        IT NE
+          BNE exit_hadd
+        ORN R5, #0
+        MOV R6, #0x1
+        MOV R7, #0x2
+        B exit_all_handle       
+handle_sub:
+
+        CMP R1, #0x2D ; Subtraction ASCII symbol
+        IT NE
+          BNE exit_hsub
+        ORN R5, #0
+        MOV R6, #0x1
+        MOV R7, #0x3
+        B exit_all_handle
+handle_div:
+
+        CMP R1, #0x2F ; Division ASCII symbol
+        IT NE
+          BNE exit_hdiv
+        ORN R5, #0
+        MOV R6, #0x1
+        MOV R7, #0x4
+        B exit_all_handle
+;--------------------------------------------------------------------------;
 
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
 ;Stack = Contains the numeric hex value of the operand ----------------------;
@@ -159,7 +262,7 @@ form_number_first:
         MUL R1, R10
         ADD R3, R1
         
-        BX LR        
+        B exit_all_handle
 form_number_second:
         MOV R10, #0x10
         
@@ -182,116 +285,9 @@ form_number_second:
         MUL R1, R10
         ADD R4, R1
         
-        BX LR
+        B exit_h1
 ;--------------------------------------------------------------------------;
 
-;test_after_input = Checks if we are gathering the last digit of the number;
-;R6 = In which power of 10 are we operating? ------------------------------;
-;R5 = Is it the first or second operand? ----------------------------------;
-test_after_input:
-            B handle_end_num
-exit_henum:
-        BX LR
-        
-handle_end_num:
-
-        CMP R6, #0x4; Indicates decimal 4 (end of number since they're supposed to have 4 digits max) 
-        IT NE
-          BNE exit_henum
-        
-        CMP R5, #0
-        IT EQ
-          BEQ form_number_first
-          
-        CMP R5, #0x1  
-        IT EQ
-          BEQ form_number_second
-        
-        BX LR        
-
-;--------------------------------------------------------------------------;
-
-;handle_input = Handles the input values accordingly ----------------------;
-;R1 = The input value -----------------------------------------------------;
-;R7 = Represents the operation the user chose -----------------------------;
-;R6 = In which power of 10 are we operating? ------------------------------;
-;R5 = Is it the first or second operand? ----------------------------------;
-handle_input:    
-            B handle_mult
-exit_hmul:  B handle_add
-exit_hadd:  B handle_sub
-exit_hsub:  B handle_div
-exit_hdiv:  B handle_eq
-exit_heq:   
-            
-            BX LR
-
-
-
-handle_eq:        
-        CMP R1, #0x3B; Equals ASCII symbol
-        IT NE
-          BNE exit_heq
-        ORN R5, #0
-        MOV R6, #1
-        MOV R7, #0x1
-        
-        BL form_number_second
-        
-        CMP R7, #0x1; Tests for multiplication
-        IT EQ
-          MULEQ R3, R4
-          
-        CMP R7, #0x2; Tests for addition
-        IT EQ
-          ADDEQ R3, R4
-        
-        CMP R7, #0x3; Tests for subtraction
-        IT EQ
-          SUBEQ R3, R4
-        
-        ;;CMP R7, #0x4; Tests for division
-        ;;IT EQ
-          ;;DIVEQ R3, R4
-        
-        B exit_heq
-handle_mult:
-
-        CMP R1, #0x2A ; Multiplication ASCII symbol
-        IT NE
-          BNE exit_hmul
-        ORN R5, #0
-        MOV R6, #0x1
-        MOV R7, #0x1
-        B exit_hmul
-handle_add:
-
-        CMP R1, #0x2B ; Addition ASCII symbol
-        IT NE
-          BNE exit_hadd
-        ORN R5, #0
-        MOV R6, #0x1
-        MOV R7, #0x2
-        B exit_hadd       
-handle_sub:
-
-        CMP R1, #0x2D ; Subtraction ASCII symbol
-        IT NE
-          BNE exit_hsub
-        ORN R5, #0
-        MOV R6, #0x1
-        MOV R7, #0x3
-        B exit_hsub
-handle_div:
-
-        CMP R1, #0x2F ; Division ASCII symbol
-        IT NE
-          BNE exit_hdiv
-        ORN R5, #0
-        MOV R6, #0x1
-        MOV R7, #0x4
-        B exit_hdiv
-;----------
 ; UART_enable: Toggles clock for UART
 ; R2 = Bit standard used
 ; Destroys: R0 and R1
