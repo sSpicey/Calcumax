@@ -187,13 +187,15 @@ exit_formnumber:
         IT EQ
           SUBEQ R3, R4
         
-        ;;CMP R7, #0x4; Tests for division
-        ;;IT EQ
-          ;;DIVEQ R3, R4
-        
-        
-        
+        CMP R7, #0x4; Tests for division
+        IT EQ
+          UDIVEQ R3, R4
+        B form_result
+exit_form_result:        
+        ;B print_result
+exit_print_resul
         B exit_all_handle
+        
 handle_mult:
 
         CMP R1, #0x2A ; Multiplication ASCII symbol
@@ -247,9 +249,40 @@ handle_div:
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
 ;Stack = Contains the numeric hex value of the operand ----------------------;
 ;Destroys R10, R11 ----------------------------------------------------------;
-form_number_first:
+form_result:
         MOV R10, #0x10
         MOV R11, #0x10
+        
+        MOV R9, R3
+        
+        UDIV R9, R11
+        ;SUB R1
+        
+        
+        ADD R3, R1
+       ; PUSH{R1}
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R3, R1
+        
+        MUL R10, R11
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R3, R1
+        
+        MUL R10, R11
+        
+        POP {R1}
+        MUL R1, R10
+        ADD R3, R1
+        
+        B form_result
+
+form_number_first:
+        MOV R10, #0xA
+        MOV R11, #0xA
         
         POP {R1}
         ADD R3, R1
@@ -272,8 +305,8 @@ form_number_first:
         
         B exit_after_operation
 form_number_second:
-        MOV R10, #0x10
-        MOV R11, #0x10
+        MOV R10, #0xA
+        MOV R11, #0xA
         
         POP {R1}
         ADD R4, R1
