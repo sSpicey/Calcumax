@@ -5,37 +5,22 @@
     <configuration>
         <name>Debug</name>
         <outputs>
-            <file>$PROJ_DIR$\src\calcumax.s</file>
             <file>$PROJ_DIR$\Debug\Exe\calcumax.out</file>
             <file>$PROJ_DIR$\src\startup_TM4C1294.s</file>
-            <file>$PROJ_DIR$\Debug\Obj\startup_TM4C1294.o.rsp</file>
             <file>$PROJ_DIR$\Debug\List\calcumax.map</file>
+            <file>$PROJ_DIR$\Debug\Obj\startup_TM4C1294.o.rsp</file>
+            <file>$PROJ_DIR$\src\calcumax.s</file>
             <file>$PROJ_DIR$\Debug\Obj\calcumax.o</file>
             <file>$PROJ_DIR$\Debug\Obj\startup_TM4C1294.o</file>
             <file>$PROJ_DIR$\Debug\Obj\calcumax.o.rsp</file>
             <file>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C1294NC.icf</file>
         </outputs>
         <file>
-            <name>$PROJ_DIR$\src\calcumax.s</name>
-            <outputs>
-                <tool>
-                    <name>AARM</name>
-                    <file> 5</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>AARM</name>
-                    <file> 7</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
             <name>$PROJ_DIR$\Debug\Exe\calcumax.out</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 4</file>
+                    <file> 2</file>
                 </tool>
             </outputs>
             <inputs>
@@ -61,11 +46,26 @@
             </inputs>
         </file>
         <file>
+            <name>$PROJ_DIR$\src\calcumax.s</name>
+            <outputs>
+                <tool>
+                    <name>AARM</name>
+                    <file> 5</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>AARM</name>
+                    <file> 7</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
             <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 1 4</file>
+                    <file> 0 2</file>
                 </tool>
             </outputs>
         </file>

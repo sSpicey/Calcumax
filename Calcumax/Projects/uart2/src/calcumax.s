@@ -112,12 +112,11 @@ wrx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         BEQ wrx ; If full, go back
 
         LDR R1, [R0] ; Receive data from UART RX typed by the user
-
         
 wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
         TST R2, #TXFE_BIT ; Is the transmitter empty?
         BEQ wtx ; If empty, go back 
-        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
        
         BL handle_input
        
@@ -192,8 +191,6 @@ exit_formnumber:
           UDIVEQ R3, R4
         B form_result
 exit_form_result:        
-        ;B print_result
-exit_print_resul
         B exit_all_handle
         
 handle_mult:
@@ -244,41 +241,71 @@ handle_div:
         B form_number_first
         
         B exit_after_operation
+;----------------------------------------------------------------------------;
+
+;form_result = Builds and displays the final result of the operation --------;
+;R10 = #0xA -----------------------------------------------------------------;
+;R9 = QUOTIENT --------------------------------------------------------------;
+;R8 = DIVISOR * DIVIDEND ----------------------------------------------------;
+;R3 = DIVIDEND AND REST -----------------------------------------------------;
+form_result:
+        MOV R10, #0xA
+        MOV R12, #0
+        MOV R11, R3 ;The rest of the division R11 = R3 - #0xA*R9 and we set R8 = #0xA * R9
+        MOV R9, R3
+        
+        MOV R1, #0x0A ; NL in ASCII   
+        STR R1, [R0]  ; Sends the Space ASCII to the UART
+
+        MOV R2, #0x0D ; CR in ASCII   
+        STR R2, [R0]  ; Sends the Space ASCII to the UART
+
+        
+loop_form_result:        
+        CMP R9, #0; Tests if the quotient = zero, or, if we iterated through all digits
+          BEQ print_result
+        
+        MOV R3, R9 ; R3 = DIVIDEND
+        UDIV R9, R10  ; R9 = QUOTIENT
+             
+        
+        MOV R8, R9
+        MUL R8, R10 ; R8 = QUOTIENT*DIVISOR
+        
+        SUB R3, R8 ; R3 = REST
+        ADD R3, #0x30 ; HEX to ASCII
+        PUSH {R3} ; Transmits to the UART TX the data supposed to be printed out
+        
+        
+        ADD R9, #0x1 ; Counts how many digits the result has
+        B loop_form_result
+        
+        B print_result
+
+
+        B exit_after_operation
+
 ;--------------------------------------------------------------------------;
+print_result:
+        MOV R10, #0x10
+        MOV R11, R10
+
+loop_print_result:
+        CMP R12, #0; If we've ran out of digits to be displayed, exit 
+          BEQ exit_print_result
+          
+        POP {R1}
+        STR R1, [R0]
+        
+        SUB R12, #0x1
+        B loop_print_result
+        
+exit_print_result:
+        B exit_after_operation
 
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
 ;Stack = Contains the numeric hex value of the operand ----------------------;
 ;Destroys R10, R11 ----------------------------------------------------------;
-form_result:
-        MOV R10, #0x10
-        MOV R11, #0x10
-        
-        MOV R9, R3
-        
-        UDIV R9, R11
-        ;SUB R1
-        
-        
-        ADD R3, R1
-       ; PUSH{R1}
-        
-        POP {R1}
-        MUL R1, R10
-        ADD R3, R1
-        
-        MUL R10, R11
-        
-        POP {R1}
-        MUL R1, R10
-        ADD R3, R1
-        
-        MUL R10, R11
-        
-        POP {R1}
-        MUL R1, R10
-        ADD R3, R1
-        
-        B form_result
 
 form_number_first:
         MOV R10, #0xA
