@@ -186,7 +186,7 @@ exit_formnumber:
         CMP R7, #0x4; Tests for division
         IT EQ
           BEQ handle_o_div
-          
+ 
         B form_result
 exit_form_result:        
         B exit_all_handle    
@@ -410,12 +410,13 @@ loop_form_number_first:
 out_loop_form_number1:        
 
         B exit_after_operation
-        
+;--------------------------------------------------------------------------;      
 form_number_second:
         MOV R10, #0xA
         MOV R11, #0xA
         
         POP {R1}
+          
 loop_form_number_second:        
         CMP R6, #0
         IT EQ
@@ -433,7 +434,6 @@ out_loop_form_number2:
 
         B exit_formnumber
 ;--------------------------------------------------------------------------;
-
 ; UART_enable: Toggles clock for UART
 ; R2 = Bit standard used
 ; Destroys: R0 and R1
