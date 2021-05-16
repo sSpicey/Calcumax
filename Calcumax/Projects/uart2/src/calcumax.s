@@ -169,7 +169,6 @@ handle_eq:
         IT NE
           BNE exit_heq
         MOV R5, #0
-        MOV R6, #1
         
         B form_number_second  
 exit_formnumber:
@@ -199,7 +198,6 @@ handle_mult:
         IT NE
           BNE exit_hmul
         MOV R5, #0x1
-        MOV R6, #0x1
         MOV R7, #0x1
         
         B form_number_first
@@ -211,7 +209,6 @@ handle_add:
         IT NE
           BNE exit_hadd
         MOV R5, #0x1
-        MOV R6, #0x1
         MOV R7, #0x2
         
         B form_number_first
@@ -223,7 +220,6 @@ handle_sub:
         IT NE
           BNE exit_hsub
         MOV R5, #0x1
-        MOV R6, #0x1
         MOV R7, #0x3
         
         B form_number_first
@@ -235,7 +231,6 @@ handle_div:
         IT NE
           BNE exit_hdiv
         MOV R5, #0x1
-        MOV R6, #0x1
         MOV R7, #0x4
         
         B form_number_first
@@ -344,28 +339,26 @@ wtx6:   LDR R1, [R0, #UART_FR] ; UART STATUS
 ;Stack = Contains the numeric hex value of the operand ----------------------;
 ;Destroys R10, R11 ----------------------------------------------------------;
 form_number_first:
+        SUB R6, #0x1
         MOV R10, #0xA
         MOV R11, #0xA
         
         POP {R1}
+loop_form_number_first:        
+        CMP R6, #0
+        IT EQ
+          BEQ out_loop_form_number1
+          
         ADD R3, R1
-        
+   
         POP {R1}
         MUL R1, R10
-        ADD R3, R1
-        
         MUL R10, R11
+        SUB R6,#0x1
         
-        POP {R1}
-        MUL R1, R10
-        ADD R3, R1
-        
-        MUL R10, R11
-        
-        POP {R1}
-        MUL R1, R10
-        ADD R3, R1
-        
+        B loop_form_number_first
+out_loop_form_number1:        
+
         B exit_after_operation
         
 form_number_second:
