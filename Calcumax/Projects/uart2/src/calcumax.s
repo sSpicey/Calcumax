@@ -293,10 +293,13 @@ loop_form_result:
 
         B exit_after_operation
 
-;--------------------------------------------------------------------------;
+;print_result = Prints the result of the calculation ------------------------;
+;R10 = #0x10 ----------------------------------------------------------------;
+;R12 = How many numbers does the result has?---------------------------------;
+;The stack contains the result ----------------------------------------------;
+;----------------------------------------------------------------------------;
 print_result:
         MOV R10, #0x10
-        MOV R11, R10
 
 loop_print_result:
         CMP R12, #0; If we've ran out of digits to be displayed, exit 
@@ -335,11 +338,11 @@ wtx6:   LDR R1, [R0, #UART_FR] ; UART STATUS
         MOV R7, #1
           
         B exit_after_operation
+;--------------------------------------------------------------------------;
 
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
 ;Stack = Contains the numeric hex value of the operand ----------------------;
 ;Destroys R10, R11 ----------------------------------------------------------;
-
 form_number_first:
         MOV R10, #0xA
         MOV R11, #0xA
@@ -364,6 +367,7 @@ form_number_first:
         ADD R3, R1
         
         B exit_after_operation
+        
 form_number_second:
         MOV R10, #0xA
         MOV R11, #0xA
