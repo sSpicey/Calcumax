@@ -127,8 +127,6 @@ wtx:    LDR R2, [R0, #UART_FR] ; UART STATUS
 exit_after_operation:                               
          
         B loop
-
-
 ; --------------------------------SUBROUTINES--------------------------------;
 
 ;handle_input = Handles the input values accordingly ----------------------;
@@ -187,11 +185,12 @@ exit_formnumber:
         
         CMP R7, #0x4; Tests for division
         IT EQ
-          UDIVEQ R3, R4
+          BEQ handle_o_div
+          
         B form_result
 exit_form_result:        
-        B exit_all_handle
-        
+        B exit_all_handle    
+        LTORG ;RAISES LITERAL POOL AS TO REFRESH THE CODE (CODE LARGER THAN 4KB)  
 handle_mult:
 
         CMP R1, #0x2A ; Multiplication ASCII symbol
@@ -237,7 +236,59 @@ handle_div:
         
         B exit_after_operation
 ;----------------------------------------------------------------------------;
+handle_o_div:
+        CMP R4, #0
+        IT EQ
+          BEQ wrong_div
+          
+        UDIV R3, R4
+        
+        B form_result
+wrong_div:
+wtx7:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx7 ; If empty, go back 
 
+        MOV R1, #0x0D ; CR in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
+wtx8:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx8 ; If empty, go back 
+
+        MOV R1, #0x0A ; NL in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
+
+wtx9:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx9 ; If empty, go back 
+
+        MOV R1, #'E' ; CR in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
+wtx10:  LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx10 ; If empty, go back 
+
+        MOV R1, #'R' ; NL in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
+
+wtx11:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx11 ; If empty, go back 
+
+        MOV R1, #'R' ; CR in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
+wtx12:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx12 ; If empty, go back 
+
+        MOV R1, #'!' ; NL in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out
+
+
+       B exit_print_result
 ;form_result = Builds and displays the final result of the operation --------;
 ;R10 = #0xA -----------------------------------------------------------------;
 ;R8 = DIVISOR * DIVIDEND ----------------------------------------------------;
@@ -287,7 +338,6 @@ loop_form_result:
 
 
         B exit_after_operation
-
 ;print_result = Prints the result of the calculation ------------------------;
 ;R10 = #0x10 ----------------------------------------------------------------;
 ;R12 = How many numbers does the result has?---------------------------------;
