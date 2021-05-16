@@ -277,7 +277,7 @@ loop_form_result:
         PUSH {R3} ; Transmits to the UART TX the data supposed to be printed out
         
         
-        ADD R9, #0x1 ; Counts how many digits the result has
+        ADD R12, #0x1 ; Counts how many digits the result has
         B loop_form_result
         
         B print_result
