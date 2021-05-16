@@ -245,8 +245,8 @@ handle_div:
 
 ;form_result = Builds and displays the final result of the operation --------;
 ;R10 = #0xA -----------------------------------------------------------------;
-;R9 = QUOTIENT --------------------------------------------------------------;
 ;R8 = DIVISOR * DIVIDEND ----------------------------------------------------;
+;R9 = QUOTIENT --------------------------------------------------------------;
 ;R3 = DIVIDEND AND REST -----------------------------------------------------;
 form_result:
         MOV R10, #0xA
@@ -254,12 +254,20 @@ form_result:
         MOV R11, R3 ;The rest of the division R11 = R3 - #0xA*R9 and we set R8 = #0xA * R9
         MOV R9, R3
         
+wtx2:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx2 ; If empty, go back 
+
         MOV R1, #0x0A ; NL in ASCII   
-        STR R1, [R0]  ; Sends the Space ASCII to the UART
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out  
 
-        MOV R2, #0x0D ; CR in ASCII   
-        STR R2, [R0]  ; Sends the Space ASCII to the UART
+wtx3:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx3 ; If empty, go back 
 
+        MOV R1, #0x0D ; CR in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+        
         
 loop_form_result:        
         CMP R9, #0; Tests if the quotient = zero, or, if we iterated through all digits
@@ -293,14 +301,39 @@ print_result:
 loop_print_result:
         CMP R12, #0; If we've ran out of digits to be displayed, exit 
           BEQ exit_print_result
-          
-        POP {R1}
-        STR R1, [R0]
         
+wtx4:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx4 ; If empty, go back 
+        
+        POP {R1}
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
         SUB R12, #0x1
         B loop_print_result
         
 exit_print_result:
+wtx5:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx5 ; If empty, go back 
+
+        MOV R1, #0x0D ; CR in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
+wtx6:   LDR R1, [R0, #UART_FR] ; UART STATUS
+        TST R1, #TXFE_BIT ; Is the transmitter empty?
+        BEQ wtx6 ; If empty, go back 
+
+        MOV R1, #0x0A ; NL in ASCII   
+        STR R1, [R0] ; Transmits to the UART TX the data supposed to be printed out 
+
+        ;Reinitialize the values to the next inputs
+        MOV R5, #0 
+        MOV R3, #0
+        MOV R4, #0
+        MOV R6, #0x1
+        MOV R7, #1
+          
         B exit_after_operation
 
 ;form_number_first/second = Sequentially build the operands 1 and 2 ---------;
