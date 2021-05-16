@@ -366,24 +366,21 @@ form_number_second:
         MOV R11, #0xA
         
         POP {R1}
+loop_form_number_second:        
+        CMP R6, #0
+        IT EQ
+          BEQ out_loop_form_number2
+          
         ADD R4, R1
-        
+   
         POP {R1}
         MUL R1, R10
-        ADD R4, R1
-        
         MUL R10, R11
+        SUB R6,#0x1
         
-        POP {R1}
-        MUL R1, R10
-        ADD R4, R1
-        
-        MUL R10, R11
-        
-        POP {R1}
-        MUL R1, R10
-        ADD R4, R1
-        
+        B loop_form_number_second
+out_loop_form_number2:        
+
         B exit_formnumber
 ;--------------------------------------------------------------------------;
 
